@@ -14,8 +14,9 @@ class ViewController: UIViewController {
     
     private var isFinishingType = true
     
-    private var singleCommands: [String: (Double) -> Double] = [:]
-    
+    private lazy var calculateLogic = {
+        return CalculatorLogic()
+    }()
     
     private var displayValue: Double {
         get {
@@ -34,18 +35,6 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        singleCommands["+/-"] = { value in
-            return value * -1
-        }
-        
-        singleCommands["AC"] = { value in
-            return 0
-        }
-        
-        singleCommands["%"] = { value in
-            return value * 0.01
-        }
     }
     
     @IBAction func calcButtonPressed(_ sender: UIButton) {
@@ -53,11 +42,9 @@ class ViewController: UIViewController {
         //What should happen when a non-number button is pressed
         isFinishingType = true
                 
-        if let calcMethod = sender.currentTitle {
-            
-            if let safeAction = singleCommands[calcMethod] {
-                displayValue = safeAction(displayValue)
-            }
+        if let calcMethod = sender.currentTitle, let currentDisplayValue = Double(displayLabel.text!) {
+            let result = calculateLogic.calculate(symbol: calcMethod, value: currentDisplayValue)
+            displayLabel.text = String(result)
         }
     }
 
