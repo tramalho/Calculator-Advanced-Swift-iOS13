@@ -14,7 +14,24 @@ class ViewController: UIViewController {
     
     private var isFinishingType = true
     
+    private var singleCommands: [String: (Double) -> Double] = [:]
     
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        singleCommands["+/-"] = { value in
+            return value * -1
+        }
+        
+        singleCommands["AC"] = { value in
+            return 0
+        }
+        
+        singleCommands["%"] = { value in
+            return value * 0.01
+        }
+    }
     
     @IBAction func calcButtonPressed(_ sender: UIButton) {
         
@@ -23,6 +40,15 @@ class ViewController: UIViewController {
         
         guard let number = Double(displayLabel.text!) else {
             fatalError("Cannot convert displayLabel text to Double.")
+        }
+        
+        if let calcMethod = sender.currentTitle {
+            
+            let action = singleCommands[calcMethod]
+            
+            let result = action!(number)
+            
+            displayLabel.text = "\(result)"
         }
     }
 
