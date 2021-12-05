@@ -20,6 +20,10 @@ class ViewController: UIViewController {
         
         //What should happen when a non-number button is pressed
         isFinishingType = true
+        
+        guard let number = Double(displayLabel.text!) else {
+            fatalError("Cannot convert displayLabel text to Double.")
+        }
     }
 
     
