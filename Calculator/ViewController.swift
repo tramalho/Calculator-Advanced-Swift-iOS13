@@ -44,11 +44,10 @@ class ViewController: UIViewController {
         
         if let calcMethod = sender.currentTitle {
             
-            let action = singleCommands[calcMethod]
-            
-            let result = action!(number)
-            
-            displayLabel.text = "\(result)"
+            if let safeAction = singleCommands[calcMethod] {
+                let result = safeAction(number)
+                displayLabel.text = "\(result)"
+            }
         }
     }
 
@@ -62,11 +61,24 @@ class ViewController: UIViewController {
                 displayLabel.text = value
                 isFinishingType = false
             } else {
+                
+                    if value == "." {
+                        
+                    guard let currentDisplayValue = Double(displayLabel.text!) else {
+                        fatalError("Cannot convert displayLabel text to Double.")
+                    }
+                    
+                    if (!(floor(currentDisplayValue) == currentDisplayValue)) {
+                        return
+                    }
+                }
+                
                 displayLabel.text = (displayLabel.text ?? "") + value
             }
-            
         }
+            
     }
-
 }
+
+
 
