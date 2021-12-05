@@ -17,6 +17,21 @@ class ViewController: UIViewController {
     private var singleCommands: [String: (Double) -> Double] = [:]
     
     
+    private var displayValue: Double {
+        get {
+            guard let number = Double(displayLabel.text!) else {
+                fatalError("Cannot convert displayLabel text to Double.")
+            }
+            
+            return number
+        }
+        
+        set {
+            displayLabel.text = String(newValue)
+        }
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -37,16 +52,11 @@ class ViewController: UIViewController {
         
         //What should happen when a non-number button is pressed
         isFinishingType = true
-        
-        guard let number = Double(displayLabel.text!) else {
-            fatalError("Cannot convert displayLabel text to Double.")
-        }
-        
+                
         if let calcMethod = sender.currentTitle {
             
             if let safeAction = singleCommands[calcMethod] {
-                let result = safeAction(number)
-                displayLabel.text = "\(result)"
+                displayValue = safeAction(displayValue)
             }
         }
     }
@@ -63,14 +73,18 @@ class ViewController: UIViewController {
             } else {
                 
                     if value == "." {
-                        
-                    guard let currentDisplayValue = Double(displayLabel.text!) else {
-                        fatalError("Cannot convert displayLabel text to Double.")
-                    }
                     
-                    if (!(floor(currentDisplayValue) == currentDisplayValue)) {
-                        return
-                    }
+                        if displayLabel.text?.contains(".") == true {
+                            return
+                        }
+                            
+                        guard let currentDisplayValue = Double(displayLabel.text!) else {
+                            fatalError("Cannot convert displayLabel text to Double.")
+                        }
+                        
+                        if (!(floor(currentDisplayValue) == currentDisplayValue)) {
+                            return
+                        }
                 }
                 
                 displayLabel.text = (displayLabel.text ?? "") + value
