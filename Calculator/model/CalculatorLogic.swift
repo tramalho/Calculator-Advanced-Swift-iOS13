@@ -8,9 +8,10 @@
 
 import Foundation
 
-struct CalculatorLogic {
+class CalculatorLogic {
     
-    private var singleCommands: [String: (Double) -> Double] = [:]
+    private var singleCommands: [String: (Double) -> Double?] = [:]
+    private var steps: [String: Double] = [:]
     
     init() {
         singleCommands["+/-"] = { value in
@@ -18,21 +19,52 @@ struct CalculatorLogic {
         }
         
         singleCommands["AC"] = { value in
+            self.steps = [:]
             return 0
         }
         
         singleCommands["%"] = { value in
             return value * 0.01
         }
+        singleCommands["+"] = { value in
+            self.steps["+"] = value
+            return nil
+        }
+        singleCommands["-"] = { value in
+            self.steps["-"] = value
+            return nil
+        }
+        singleCommands["x"] = { value in
+            self.steps["x"] = value
+            return nil
+        }
+        singleCommands["%"] = { value in
+            self.steps["%"] = value
+            return nil
+        }
+        singleCommands["="] = { value in
+            self.steps["="] = value
+            return self.execute()
+        }
     }
     
-    func calculate(symbol: String, value: Double) -> Double {
+    func calculate(symbol: String, value: Double) -> Double? {
         
         if let safeAction = singleCommands[symbol] {
             return safeAction(value)
         }
 
-        return Double(0)
+        return nil
     }
     
+    private func execute() -> Double {
+        
+        var result: Double = 0
+        
+        steps.forEach { (key: String, value: Double) in
+            
+        }
+        
+        return result
+    }
 }
