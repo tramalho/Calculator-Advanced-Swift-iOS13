@@ -44,7 +44,7 @@ class ViewController: UIViewController {
                 
         if let calcMethod = sender.currentTitle, let currentDisplayValue = Double(displayLabel.text!) {
             let result = calculateLogic.calculate(symbol: calcMethod, value: currentDisplayValue)
-            displayLabel.text = String(result)
+            displayLabel.text = "\(result)"
         }
     }
 
